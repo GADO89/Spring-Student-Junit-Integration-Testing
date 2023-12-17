@@ -56,9 +56,15 @@
             <version>5.4.0</version>
         </dependency>
         <dependency>
-            <groupId>org.wso2.orbit.org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.3.6.wso2v3</version>
+            <groupId>org.sonatype.nexus</groupId>
+            <artifactId>nexus-httpclient</artifactId>
+            <version>3.58.1-01</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-annotations-api</artifactId>
+            <version>9.0.76</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

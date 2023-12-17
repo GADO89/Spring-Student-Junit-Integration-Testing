@@ -32,6 +32,8 @@ public class RequestUtil {
 
     @Value("${server.port}")
     private String serverPort;
+     @Value("${server.servlet.context-path}")
+    private String ApplicationContext;
     @PostConstruct
     public void setup() {
 
@@ -47,25 +49,25 @@ public class RequestUtil {
     }
     public <T>ResponseEntity<T> post(String path,@Nullable Object body,
                                      Map<String, Object> headers, Class<T>responseType){
-      String url=String.format("http://localhost:%s/%s", serverPort,path);
+      String url=String.format("http://localhost:%s/%s/%s", serverPort,ApplicationContext,path);
         HttpEntity httpEntity=getHttpEntity(body, headers);
         return restTemplate.exchange(url, HttpMethod.POST, httpEntity, responseType);
     }
     public <T>ResponseEntity<T> put(String path,@Nullable Object body,
                                      Map<String, Object> headers, Class<T>responseType){
-        String url=String.format("http://localhost:%s/%s", serverPort,path);
+        String url=String.format("http://localhost:%s/%s/%s", serverPort,ApplicationContext,path);
         HttpEntity httpEntity=getHttpEntity(body, headers);
         return restTemplate.exchange(url, HttpMethod.PUT, httpEntity, responseType);
     }
     public <T>ResponseEntity<T> get(String path,@Nullable Object body,
                                     Map<String, Object> headers, Class<T>responseType){
-        String url=String.format("http://localhost:%s/%s", serverPort,path);
+        String url=String.format("http://localhost:%s/%s/%s", serverPort,ApplicationContext,path);
         HttpEntity httpEntity=getHttpEntity(body, headers);
         return restTemplate.exchange(url, HttpMethod.GET, httpEntity, responseType);
     }
     public <T>ResponseEntity<T> delete(String path,@Nullable Object body,
                                     Map<String, Object> headers, Class<T>responseType){
-        String url=String.format("http://localhost:%s/%s", serverPort,path);
+        String url=String.format("http://localhost:%s/%s/%s", serverPort,ApplicationContext,path);
         HttpEntity httpEntity=getHttpEntity(body, headers);
         return restTemplate.exchange(url, HttpMethod.DELETE, httpEntity, responseType);
     }

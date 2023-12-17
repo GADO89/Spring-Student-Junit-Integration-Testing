@@ -33,4 +33,28 @@ public class StudentControllerIT extends StudentApplicationIT {
                 requestUtil.get("api/getAll/",null,null, Object.class);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
+    @Test
+    public void deleteStudent_thenValidate(){
+        ResponseEntity<Object> responseEntity=
+                requestUtil.delete("api/delete/4",null,null, Object.class);
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+    @Test
+    public void editStudent_thenValidate(){
+        Student student=new Student();
+        student.setId(1);
+        student.setName("Karim");
+        student.setAge(21);
+        student.setPhone("01125589989");
+        student.setActive(false);
+        ResponseEntity<Object> responseEntity=
+                requestUtil.put("api/edit/",student,null, Object.class);
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+    @Test
+    public void getStudentById_thenValidate(){
+        ResponseEntity<Object> responseEntity=
+                requestUtil.get("api/get/1",null,null, Object.class);
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
 }

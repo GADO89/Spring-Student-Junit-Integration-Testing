@@ -28,44 +28,55 @@ public class StudentControllerIT extends StudentApplicationIT {
     private StudentRepo studentRepo;
     @Autowired
     private DataUtil dataUtil;
+
+/*
     @Test
     public void createStudent_thenValidate() throws JsonProcessingException {
-        Student student=new Student();
-        student.setName("Eslam");
-        student.setAge(22);
-        student.setPhone("01125589989");
-        student.setActive(true);
-        ResponseEntity<String> responseEntity=
-                requestUtil.post("api/create/",student,null, String.class);
-        Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+       // Given Student
+        Student student = new Student("Eslam",22,"01113903660",true);
 
+        // When Create Student
+        ResponseEntity<String> responseEntity =
+                requestUtil.post("/api/create",student,null,String.class);
+
+        // Then Validate
+        Assertions.assertEquals(HttpStatus.CREATED,responseEntity.getStatusCode());
+        StudentDto studentDto = objectMapper.readValue(responseEntity.getBody(),StudentDto.class);
+        Assertions.assertEquals("Eslam",studentDto.getName());
+        Assertions.assertEquals(22,studentDto.getAge());
+        Assertions.assertEquals("01113903660",studentDto.getPhone());
+        Assertions.assertTrue(studentDto.isActive());
+
+        // Clean Data
+        dataUtil.delete(studentDto);
+    }*/
+
+    @Test
+    public void createStudent_thenValidate() throws JsonProcessingException {
+       // Student student=createStudent("Eslam",22,"01125589989",true);
+         Student student = new Student("Eslam",22,"01113903660",true);
+
+        ResponseEntity<String> responseEntity=
+                requestUtil.post("/api/create",student,null, String.class);
+
+        Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         StudentDto studentDto=objectMapper.readValue(responseEntity.getBody(),StudentDto.class);
         Assertions.assertEquals("Eslam",studentDto.getName());
         Assertions.assertEquals(22,studentDto.getAge());
-        Assertions.assertEquals("01125589989",studentDto.getPhone());
+        Assertions.assertEquals("01113903660",studentDto.getPhone());
         Assertions.assertEquals(true,studentDto.isActive());
        // studentRepo.deleteById(studentDto.getId());
         dataUtil.delete(studentDto);
 
     }
+
     @Test
     public void getAllStudent_thenValidate() throws IOException {  //getAllStudent IT Clean Data
-        Student student1=new Student();
-        student1.setName("Eslam");
-        student1.setAge(22);
-        student1.setPhone("00005589989");
-        student1.setActive(true);
-        Student student2=new Student();
-        student2.setName("Ahmed");
-        student2.setAge(22);
-        student2.setPhone("01345589989");
-        student2.setActive(false);
-
-        student1 =studentRepo.save(student1);
-        student2 =studentRepo.save(student2);
+       createStudent("Eslam",22,"00005589989",true);
+       createStudent("Ahmed",22,"01345589989",false);
 
         ResponseEntity<String> responseEntity=
-                requestUtil.get("api/getAll/",null,null, String.class);
+                requestUtil.get("/api/getAll",null,null, String.class);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
          StudentDto[] studentListDto = objectMapper.readValue(responseEntity.getBody(),StudentDto[].class);
@@ -83,28 +94,22 @@ public class StudentControllerIT extends StudentApplicationIT {
     }
     @Test
     public void deleteStudent_thenValidate() throws JsonProcessingException {
-        Student student=new Student();
-        student.setName("Eslam");
-        student.setAge(22);
-        student.setPhone("00005589989");
-        student.setActive(true);
+        Student student=createStudent("Eslam",22,"00005589989",true);
+
         studentRepo.save(student);
         ResponseEntity<String> responseEntity=
-                requestUtil.delete(String.format("api/delete/%s",student.getId()),null,null, String.class);
+                requestUtil.delete(String.format("/api/delete/%s",student.getId()),null,null, String.class);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
     @Test
     public void editStudent_thenValidate() throws JsonProcessingException {
-        Student student=new Student();
-        student.setName("Karim");
-        student.setAge(21);
-        student.setPhone("01125589989");
-        student.setActive(false);
+        Student student=createStudent("Karim",21,"01125589989",false);
+
         student= studentRepo.save(student);
         System.out.println("ID "+student.getId());
         student.setName("Ahmed");
         ResponseEntity<String> responseEntity=
-                requestUtil.put("api/edit",student,null, String.class);
+                requestUtil.put("/api/edit",student,null, String.class);
         StudentDto studentDto = objectMapper.readValue(responseEntity.getBody(),StudentDto.class);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         Assertions.assertEquals("Ahmed",studentDto.getName());
@@ -113,14 +118,10 @@ public class StudentControllerIT extends StudentApplicationIT {
     }
     @Test
     public void getStudentById_thenValidate() throws JsonProcessingException {
-        Student student=new Student();
-        student.setName("Karim");
-        student.setAge(21);
-        student.setPhone("01125589989");
-        student.setActive(false);
-        student= studentRepo.save(student);
+        Student student=createStudent("Karim",21,"01125589989",false);
+
         ResponseEntity<String> responseEntity=
-                requestUtil.get(String.format("api/get/%s",student.getId()),null,null, String.class);
+                requestUtil.get(String.format("/api/get/%s",student.getId()),null,null, String.class);
         StudentDto studentDto=objectMapper.readValue(responseEntity.getBody(),StudentDto.class);
         Assertions.assertEquals("Karim",studentDto.getName());
         Assertions.assertEquals(21,studentDto.getAge());
@@ -129,5 +130,9 @@ public class StudentControllerIT extends StudentApplicationIT {
       //  studentRepo.deleteById(student.getId());
         dataUtil.delete(studentDto);
 
+    }
+    public Student createStudent( String name, int age, String phone, boolean active){
+        Student student=new Student(name,age,phone,active);
+      return   studentRepo.save(student);
     }
 }

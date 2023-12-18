@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.testing.StudentApplicationIT;
 import com.spring.testing.model.Student;
 import com.spring.testing.model.StudentDto;
+import com.spring.testing.repo.StudentRepo;
 import com.spring.testing.util.RequestUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,8 @@ public class StudentControllerIT extends StudentApplicationIT {
     private RequestUtil requestUtil;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private StudentRepo studentRepo;
     @Test
     public void createStudent_thenValidate() throws JsonProcessingException {
         Student student=new Student();
@@ -35,6 +38,8 @@ public class StudentControllerIT extends StudentApplicationIT {
         Assertions.assertEquals(22,studentDto.getAge());
         Assertions.assertEquals("01125589989",studentDto.getPhone());
         Assertions.assertEquals(true,studentDto.isActive());
+        System.out.println(studentDto.getId());
+        studentRepo.deleteById(studentDto.getId());
 
     }
     @Test

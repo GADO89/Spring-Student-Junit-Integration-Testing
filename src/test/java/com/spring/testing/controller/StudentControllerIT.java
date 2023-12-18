@@ -106,9 +106,21 @@ public class StudentControllerIT extends StudentApplicationIT {
         studentRepo.deleteById(student.getId());
     }
     @Test
-    public void getStudentById_thenValidate(){
-        ResponseEntity<Object> responseEntity=
-                requestUtil.get("api/get/1",null,null, Object.class);
-        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    public void getStudentById_thenValidate() throws JsonProcessingException {
+        Student student=new Student();
+        student.setName("Karim");
+        student.setAge(21);
+        student.setPhone("01125589989");
+        student.setActive(false);
+        student= studentRepo.save(student);
+        ResponseEntity<String> responseEntity=
+                requestUtil.get(String.format("api/get/%s",student.getId()),null,null, String.class);
+        StudentDto studentDto=objectMapper.readValue(responseEntity.getBody(),StudentDto.class);
+        Assertions.assertEquals("Karim",studentDto.getName());
+        Assertions.assertEquals(21,studentDto.getAge());
+        Assertions.assertEquals("01125589989",studentDto.getPhone());
+        Assertions.assertEquals(false,studentDto.isActive());
+        studentRepo.deleteById(student.getId());
+
     }
 }

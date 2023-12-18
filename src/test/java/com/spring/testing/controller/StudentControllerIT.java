@@ -7,6 +7,7 @@ import com.spring.testing.StudentApplicationIT;
 import com.spring.testing.model.Student;
 import com.spring.testing.model.StudentDto;
 import com.spring.testing.repo.StudentRepo;
+import com.spring.testing.util.DataUtil;
 import com.spring.testing.util.RequestUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,8 @@ public class StudentControllerIT extends StudentApplicationIT {
     private ObjectMapper objectMapper;
     @Autowired
     private StudentRepo studentRepo;
+    @Autowired
+    private DataUtil dataUtil;
     @Test
     public void createStudent_thenValidate() throws JsonProcessingException {
         Student student=new Student();
@@ -41,7 +44,8 @@ public class StudentControllerIT extends StudentApplicationIT {
         Assertions.assertEquals(22,studentDto.getAge());
         Assertions.assertEquals("01125589989",studentDto.getPhone());
         Assertions.assertEquals(true,studentDto.isActive());
-        studentRepo.deleteById(studentDto.getId());
+       // studentRepo.deleteById(studentDto.getId());
+        dataUtil.delete(studentDto);
 
     }
     @Test
@@ -72,8 +76,9 @@ public class StudentControllerIT extends StudentApplicationIT {
         Assertions.assertEquals("01345589989",studentListDto[1].getPhone());
         Assertions.assertFalse(studentListDto[1].isActive());
 
-        studentRepo.deleteById(student1.getId());
-        studentRepo.deleteById(student2.getId());
+        //studentRepo.deleteById(student1.getId());
+        //studentRepo.deleteById(student2.getId());
+        dataUtil.delete(studentListDto);
 
     }
     @Test
@@ -103,7 +108,8 @@ public class StudentControllerIT extends StudentApplicationIT {
         StudentDto studentDto = objectMapper.readValue(responseEntity.getBody(),StudentDto.class);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         Assertions.assertEquals("Ahmed",studentDto.getName());
-        studentRepo.deleteById(student.getId());
+        //studentRepo.deleteById(student.getId());
+        dataUtil.delete(studentDto);
     }
     @Test
     public void getStudentById_thenValidate() throws JsonProcessingException {
@@ -120,7 +126,8 @@ public class StudentControllerIT extends StudentApplicationIT {
         Assertions.assertEquals(21,studentDto.getAge());
         Assertions.assertEquals("01125589989",studentDto.getPhone());
         Assertions.assertEquals(false,studentDto.isActive());
-        studentRepo.deleteById(student.getId());
+      //  studentRepo.deleteById(student.getId());
+        dataUtil.delete(studentDto);
 
     }
 }

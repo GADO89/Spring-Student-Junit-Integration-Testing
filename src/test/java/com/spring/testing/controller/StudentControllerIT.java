@@ -77,9 +77,15 @@ public class StudentControllerIT extends StudentApplicationIT {
 
     }
     @Test
-    public void deleteStudent_thenValidate(){
-        ResponseEntity<Object> responseEntity=
-                requestUtil.delete("api/delete/4",null,null, Object.class);
+    public void deleteStudent_thenValidate() throws JsonProcessingException {
+        Student student=new Student();
+        student.setName("Eslam");
+        student.setAge(22);
+        student.setPhone("00005589989");
+        student.setActive(true);
+        studentRepo.save(student);
+        ResponseEntity<String> responseEntity=
+                requestUtil.delete(String.format("api/delete/%s",student.getId()),null,null, String.class);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
     @Test

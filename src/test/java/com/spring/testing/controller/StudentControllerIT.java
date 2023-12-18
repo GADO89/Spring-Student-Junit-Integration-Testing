@@ -89,16 +89,21 @@ public class StudentControllerIT extends StudentApplicationIT {
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
     @Test
-    public void editStudent_thenValidate(){
+    public void editStudent_thenValidate() throws JsonProcessingException {
         Student student=new Student();
-        student.setId(1);
         student.setName("Karim");
         student.setAge(21);
         student.setPhone("01125589989");
         student.setActive(false);
-        ResponseEntity<Object> responseEntity=
-                requestUtil.put("api/edit/",student,null, Object.class);
+        student= studentRepo.save(student);
+        System.out.println("ID "+student.getId());
+        student.setName("Ahmed");
+        ResponseEntity<String> responseEntity=
+                requestUtil.put("api/edit",student,null, String.class);
+        StudentDto studentDto = objectMapper.readValue(responseEntity.getBody(),StudentDto.class);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertEquals("Ahmed",studentDto.getName());
+        studentRepo.deleteById(student.getId());
     }
     @Test
     public void getStudentById_thenValidate(){

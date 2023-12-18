@@ -45,7 +45,7 @@ public class StudentControllerIT extends StudentApplicationIT {
 
     }
     @Test
-    public void getAllStudent_thenValidate() throws IOException {
+    public void getAllStudent_thenValidate() throws IOException {  //getAllStudent IT Clean Data
         Student student1=new Student();
         student1.setName("Eslam");
         student1.setAge(22);
